@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-danger" id="error_message" style="visibility: hidden"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <form>
+                <div class="form-group">
+                    <label for="input_username">Username</label>
+                    <input type="text" class="form-control" id="input_username" placeholder="Enter username"/>
+                </div>
+                <div class="form-group">
+                    <label for="input_password">Password</label>
+                    <input type="password" class="form-control" id="input_password" placeholder="Password"/>
+                </div>
+                <input type="button" id="btn_login" class="btn btn-primary" value="login" onclick="onLogin()"/>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mt-5">
+            Valid credentials:
+            <pre id="debug_output"></pre>
+        </div>
+    </div>
+
+</div>
+
+</body>
+
+<script>
+    var users = {
+        "david": "pass1",
+        "roman": "pass2"
+    };
+
+    var errorMessage = document.getElementById('error_message');
+    var inputUsername = document.getElementById('input_username');
+    var inputPassword = document.getElementById('input_password');
+    var debugOutput = document.getElementById('debug_output');
+
+    debugOutput.innerHTML = JSON.stringify(users, null, 2);
+
+    function onLogin() {
+        var username = inputUsername.value;
+        var password = inputPassword.value;
+
+        if (username.length === 0) {
+            showError("Username is required")
+        } else if (password.length === 0) {
+            showError("Password is required")
+        } else if (!users.hasOwnProperty(username) || users[username] !== password) {
+            showError("Invalid credentials provided.")
+        } else {
+            setTimeout(function () {
+                window.location.href = 'http://localhost/dashboard.html';
+            }, 500)
+        }
+    }
+
+    function showError(error) {
+        errorMessage.style.visibility = 'visible';
+        errorMessage.innerText = error;
+    }
+</script>
+
+</html>
