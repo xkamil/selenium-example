@@ -1,36 +1,36 @@
 package pl.canx;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.awaitility.Awaitility;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 abstract class WebTest {
-    private static WebDriver driver;
+
+    protected WebDriver driver;
 
     @BeforeAll
-    static void beforeAll() {
-        // Disable htmldriver warnings
-        java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
-        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
-
+    private static void beforeAllWebTests() {
+        WebDriverManager.chromedriver().setup();
         Awaitility.setDefaultPollInterval(500, TimeUnit.MILLISECONDS);
         Awaitility.setDefaultTimeout(5, TimeUnit.SECONDS);
-
-        driver = new HtmlUnitDriver(true);
     }
 
-    protected static WebDriver getDriver() {
-        return driver;
+    @BeforeEach
+    private void beforeEachWebTest() {
+        driver = new ChromeDriver();
     }
 
-    @AfterAll
-    static void afterAll() {
-        driver.quit();
+    @AfterEach
+    private void afterAllWebTests() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
 }

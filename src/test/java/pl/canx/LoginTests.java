@@ -1,6 +1,6 @@
 package pl.canx;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,11 +13,11 @@ import static org.awaitility.Awaitility.await;
 
 class LoginTests extends WebTest {
 
-    private static LoginPage loginPage;
+    private LoginPage loginPage;
 
-    @BeforeAll
-    static void beforeAllLoginTests() {
-        loginPage = new LoginPage(getDriver());
+    @BeforeEach
+    void beforeEach() {
+        loginPage = new LoginPage(driver);
     }
 
     @DisplayName("User should be logged in using valid credentials")
@@ -40,7 +40,7 @@ class LoginTests extends WebTest {
 
         // then I should be logged in
         await().untilAsserted(() -> {
-            assertThat(getDriver().getTitle()).isEqualTo(DashboardPage.TITLE);
+            assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE);
         });
     }
 
