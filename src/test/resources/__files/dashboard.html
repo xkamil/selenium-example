@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <div class="alert alert-success" id="alert">Dashboard</div>
+            <div class="alert alert-success"><b>Logged in as: </b><span id="user_label"></span></div>
         </div>
     </div>
     <div class="row">
@@ -25,9 +25,21 @@
 </body>
 
 <script>
+    const userLabel = document.getElementById('user_label');
+
+    const username = localStorage.getItem('username');
+    const loggedIn = localStorage.getItem('loggedIn');
+
+    if (!loggedIn) {
+        window.location.href = 'login.html';
+    }
+
+    userLabel.innerText = username;
+
     function onLogout() {
+        localStorage.removeItem('loggedIn');
         setTimeout(function () {
-            window.location.href = 'http://localhost/login.html';
+            window.location.href = 'login.html';
         }, 500)
     }
 

@@ -1,13 +1,12 @@
 package pl.canx;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
@@ -18,10 +17,10 @@ import java.util.concurrent.TimeUnit;
 abstract class WebTest {
 
     private static final Logger logger = LoggerFactory.getLogger(WebTest.class);
+    private static final int PORT = 8089;
 
-    protected WebDriver driver;
-    protected static final int PORT = 8089;
     protected static final String BASE_URL = "localhost:" + PORT;
+    protected static WebDriver driver;
     private static WireMockServer mockServer;
 
     @BeforeAll
@@ -34,24 +33,23 @@ abstract class WebTest {
         logger.info("Starting web server on port: {}", PORT);
         mockServer = new WireMockServer(PORT);
         mockServer.start();
+
+        driver = new ChromeDriver();
     }
 
     @AfterAll
     private static void afterAllWebTests() {
+        driver.quit();
         logger.info("Shutting down web server");
         mockServer.stop();
     }
 
-    @BeforeEach
-    private void beforeEachWebTest() {
-        driver = new ChromeDriver();
-    }
-
     @AfterEach
     private void afterEachWebTests() {
-        if (driver != null) {
-            driver.quit();
-        }
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.localStorage.clear()");
+        js.executeScript("window.sessionStorage.clear();");
+        driver.manage().deleteAllCookies();
     }
 
 }

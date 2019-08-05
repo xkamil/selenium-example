@@ -2,6 +2,7 @@ package pl.canx.pom;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class LoginPage extends Page {
 
@@ -12,24 +13,43 @@ public class LoginPage extends Page {
     private final By inputPassword = By.id("input_password");
     private final By btnLogin = By.id("btn_login");
     private final By errorMessage = By.id("error_message");
+    private final By checkboxRememberMe = By.id("remember_me");
 
     public LoginPage(String baseUrl, WebDriver driver) {
         super(baseUrl, driver);
     }
 
-    public LoginPage open() {
+    public void open() {
         getDriver().get(getBaseUrl() + PATH);
-        return this;
     }
 
-    public LoginPage setUsername(String username) {
+    public void setUsername(String username) {
         getDriver().findElement(inputUsername).sendKeys(username);
-        return this;
     }
 
-    public LoginPage setPassword(String password) {
+    public String getUsername() {
+        return getDriver().findElement(inputUsername).getAttribute("value");
+    }
+
+
+    public void setPassword(String password) {
         getDriver().findElement(inputPassword).sendKeys(password);
-        return this;
+    }
+
+    public String getPassword() {
+        return getDriver().findElement(inputPassword).getAttribute("value");
+    }
+
+    public void setRememberMe(boolean rememberMe) {
+        WebElement checkbox = getDriver().findElement(checkboxRememberMe);
+
+        if ((checkbox.isSelected() && !rememberMe) || (!checkbox.isSelected() && rememberMe)) {
+            checkbox.click();
+        }
+    }
+
+    public boolean isRememberMeChecked() {
+        return getDriver().findElement(checkboxRememberMe).isSelected();
     }
 
     public void clickLoginButton() {
