@@ -3,46 +3,45 @@ package pl.canx.pom;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class LoginPage {
+public class LoginPage extends Page {
 
     public static final String TITLE = "Login page";
-    public static final String URL = "http://localhost/login.html";
+    public static final String PATH = "/login.html";
 
-    private final WebDriver driver;
     private final By inputUsername = By.id("input_username");
     private final By inputPassword = By.id("input_password");
     private final By btnLogin = By.id("btn_login");
     private final By errorMessage = By.id("error_message");
 
-    public LoginPage(WebDriver driver) {
-        this.driver = driver;
+    public LoginPage(String baseUrl, WebDriver driver) {
+        super(baseUrl, driver);
     }
 
     public LoginPage open() {
-        driver.get(URL);
+        getDriver().get(getBaseUrl() + PATH);
         return this;
     }
 
     public LoginPage setUsername(String username) {
-        driver.findElement(inputUsername).sendKeys(username);
+        getDriver().findElement(inputUsername).sendKeys(username);
         return this;
     }
 
     public LoginPage setPassword(String password) {
-        driver.findElement(inputPassword).sendKeys(password);
+        getDriver().findElement(inputPassword).sendKeys(password);
         return this;
     }
 
     public void clickLoginButton() {
-        driver.findElement(btnLogin).click();
+        getDriver().findElement(btnLogin).click();
     }
 
     public boolean isErrorMessageVisible() {
-        return driver.findElement(errorMessage).isDisplayed();
+        return getDriver().findElement(errorMessage).isDisplayed();
     }
 
     public String getErrorMessage() {
-        return driver.findElement(errorMessage).getText();
+        return getDriver().findElement(errorMessage).getText();
     }
 
 }

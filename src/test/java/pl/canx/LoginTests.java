@@ -17,7 +17,7 @@ class LoginTests extends WebTest {
 
     @BeforeEach
     void beforeEach() {
-        loginPage = new LoginPage(driver);
+        loginPage = new LoginPage(BASE_URL, driver);
     }
 
     @DisplayName("User should be logged in using valid credentials")
