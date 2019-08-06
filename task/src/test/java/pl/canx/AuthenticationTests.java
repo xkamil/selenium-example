@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pl.canx.pom.DashboardPage;
 import pl.canx.pom.LoginPage;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +37,7 @@ class AuthenticationTests extends WebTest {
         loginPage.clickLoginButton();
 
         // then I should log in
-        await().timeout(2, TimeUnit.SECONDS).untilAsserted(() ->
+        await().timeout(1, TimeUnit.SECONDS).untilAsserted(() ->
                 assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE));
     }
 
@@ -55,7 +56,7 @@ class AuthenticationTests extends WebTest {
 
         // then I should see error message
         assertThat(loginPage.isErrorMessageVisible()).isTrue();
-        assertThat(loginPage.getErrorMessage()).isEqualTo("Invalid credentials provided.");
+        assertThat(loginPage.getErrorMessage()).isEqualTo("Wrong username or password");
     }
 
 
@@ -79,18 +80,7 @@ class AuthenticationTests extends WebTest {
     @DisplayName("User should not be logged in using no username and some valid password")
     @Test
     void testLoginWithNoUsername() {
-        // given I'm on login page
-        loginPage.open();
-
-        // when I enter valid password and no username
-        loginPage.setPassword("david1");
-
-        // and I click login button
-        loginPage.clickLoginButton();
-
-        // then I should see error message
-        assertThat(loginPage.isErrorMessageVisible()).isTrue();
-        assertThat(loginPage.getErrorMessage()).isEqualTo("Username is required");
+        throw new NotImplementedException();
     }
 
     @DisplayName("User credentials should be filled if user checked `Remember me' on last successful login")
@@ -120,30 +110,23 @@ class AuthenticationTests extends WebTest {
     @DisplayName("Logged in username should display on dashboard page")
     @Test
     void testUsernameDisplayed() {
+        throw new NotImplementedException();
         // given I'm on login page
-        loginPage.open();
 
         // when I enter valid username and password
-        loginPage.setUsername("david");
-        loginPage.setPassword("david1");
 
         // and I click login button
-        loginPage.clickLoginButton();
 
         // then I should log in
-        await().timeout(2, TimeUnit.SECONDS).untilAsserted(
-                () -> assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE));
 
         // and my username should display
-        assertThat(dashboardPage.getLoggedInUsername()).isEqualTo("david");
     }
 
-    @DisplayName("Logged in username should logout if after clicking logout button")
+    @DisplayName("Logged in username should logout after clicking logout button")
     @Test
     void testLoggingOut() {
-        // given I logged in
+        // given I'm logged in
         loginPage.open();
-
         loginPage.setUsername("david");
         loginPage.setPassword("david1");
         loginPage.clickLoginButton();
@@ -160,12 +143,12 @@ class AuthenticationTests extends WebTest {
 
     @DisplayName("Not logged in user should se login page if navigating to dashboard")
     @Test
-    void testRedirectToLoginPageUnauthorizedUser() {
+    void testUnauthorizedUserCantSeeDashboard() {
         // given I'm not logged in, when I open dashboard page
         dashboardPage.open();
 
         // then I should see login page
-        await().untilAsserted(() -> assertThat(driver.getTitle()).isEqualTo(LoginPage.TITLE));
+        await().untilAsserted(() -> assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE));
     }
 
 }
