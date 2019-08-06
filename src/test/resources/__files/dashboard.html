@@ -11,14 +11,22 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <div class="alert alert-success"><b>Logged in as: </b><span id="user_label"></span></div>
+            <div class="alert alert-primary invisible" id="info_label" role="alert">
+                Logging out...
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <button id="btn_logout" class="btn btn-primary" onclick="onLogout()">Logout</button>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-outline-primary disabled">
+                    <b>User: </b><span id="user_label"></span>
+                </label>
+                <button id="btn_logout" class="btn btn-primary" onclick="onLogout()">Logout</button>
+            </div>
         </div>
     </div>
+
 
 </div>
 
@@ -26,6 +34,7 @@
 
 <script>
     const userLabel = document.getElementById('user_label');
+    const infoLabel = document.getElementById('info_label');
 
     const username = localStorage.getItem('username');
     const loggedIn = localStorage.getItem('loggedIn');
@@ -37,10 +46,9 @@
     userLabel.innerText = username;
 
     function onLogout() {
+        infoLabel.classList.remove('invisible');
         localStorage.removeItem('loggedIn');
-        setTimeout(function () {
-            window.location.href = 'login.html';
-        }, 500)
+        window.location.href = 'login.html'
     }
 
 </script>

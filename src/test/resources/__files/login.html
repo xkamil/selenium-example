@@ -11,7 +11,15 @@
 
     <div class="row">
         <div class="col">
-            <div class="alert alert-danger" id="error_message" style="visibility: hidden"></div>
+            <div class="alert alert-primary invisible" id="info_label" role="alert">
+                Logging in...
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-danger invisible" id="error_message"></div>
         </div>
     </div>
 
@@ -42,6 +50,7 @@
 </body>
 
 <script>
+    const infoLabel = document.getElementById('info_label');
     const errorMessage = document.getElementById('error_message');
     const inputUsername = document.getElementById('input_username');
     const inputPassword = document.getElementById('input_password');
@@ -73,16 +82,15 @@
             localStorage.setItem('username', username);
             localStorage.setItem('password', password);
             localStorage.setItem('loggedIn', 'true');
+            infoLabel.classList.remove('invisible');
             checkboxRememberMe.checked ? localStorage.setItem('rememberMe', 'true') : localStorage.removeItem('rememberMe');
 
-            setTimeout(function () {
-                window.location.href = 'dashboard.html';
-            }, 500)
+            setTimeout(() => window.location.href = 'dashboard.html', 1500);
         }
     }
 
     function showError(error) {
-        errorMessage.style.visibility = 'visible';
+        errorMessage.classList.remove('invisible');
         errorMessage.innerText = error;
     }
 </script>

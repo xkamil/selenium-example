@@ -31,7 +31,6 @@ public class LoginPage extends Page {
         return getDriver().findElement(inputUsername).getAttribute("value");
     }
 
-
     public void setPassword(String password) {
         getDriver().findElement(inputPassword).sendKeys(password);
     }

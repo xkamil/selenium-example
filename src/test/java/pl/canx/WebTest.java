@@ -27,8 +27,8 @@ abstract class WebTest {
     private static void beforeAllWebTests() {
         WebDriverManager.chromedriver().setup();
 
-        Awaitility.setDefaultPollInterval(500, TimeUnit.MILLISECONDS);
-        Awaitility.setDefaultTimeout(5, TimeUnit.SECONDS);
+        Awaitility.setDefaultPollInterval(100, TimeUnit.MILLISECONDS);
+        Awaitility.setDefaultTimeout(500, TimeUnit.MILLISECONDS);
 
         logger.info("Starting web server on port: {}", PORT);
         mockServer = new WireMockServer(PORT);

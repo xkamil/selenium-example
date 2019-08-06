@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import pl.canx.pom.DashboardPage;
 import pl.canx.pom.LoginPage;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.google.common.truth.Truth.assertThat;
 import static org.awaitility.Awaitility.await;
 
@@ -13,7 +15,6 @@ class AuthenticationTests extends WebTest {
 
     private LoginPage loginPage;
     private DashboardPage dashboardPage;
-
 
     @BeforeEach
     void beforeEach() {
@@ -35,9 +36,8 @@ class AuthenticationTests extends WebTest {
         loginPage.clickLoginButton();
 
         // then I should log in
-        await().untilAsserted(() -> {
-            assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE);
-        });
+        await().timeout(2, TimeUnit.SECONDS).untilAsserted(() ->
+                assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE));
     }
 
     @DisplayName("User should not be logged in using invalid credentials")
@@ -104,15 +104,12 @@ class AuthenticationTests extends WebTest {
         loginPage.setRememberMe(true);
         loginPage.clickLoginButton();
 
-        await().untilAsserted(() -> {
-            assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE);
-        });
+        await().timeout(2, TimeUnit.SECONDS).untilAsserted(
+                () -> assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE));
 
         dashboardPage.clickLogoutButton();
 
-        await().untilAsserted(() -> {
-            assertThat(driver.getTitle()).isEqualTo(LoginPage.TITLE);
-        });
+        await().untilAsserted(() -> assertThat(driver.getTitle()).isEqualTo(LoginPage.TITLE));
 
         // then I should see credentials filled in and 'remember me' checked
         assertThat(loginPage.getUsername()).isEqualTo("david");
@@ -134,9 +131,8 @@ class AuthenticationTests extends WebTest {
         loginPage.clickLoginButton();
 
         // then I should log in
-        await().untilAsserted(() -> {
-            assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE);
-        });
+        await().timeout(2, TimeUnit.SECONDS).untilAsserted(
+                () -> assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE));
 
         // and my username should display
         assertThat(dashboardPage.getLoggedInUsername()).isEqualTo("david");
@@ -152,29 +148,24 @@ class AuthenticationTests extends WebTest {
         loginPage.setPassword("david1");
         loginPage.clickLoginButton();
 
-        await().untilAsserted(() -> {
-            assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE);
-        });
+        await().timeout(2, TimeUnit.SECONDS).untilAsserted(
+                () -> assertThat(driver.getTitle()).isEqualTo(DashboardPage.TITLE));
 
         // when I click logout button
         dashboardPage.clickLogoutButton();
 
         // then I should see login page
-        await().untilAsserted(() -> {
-            assertThat(driver.getTitle()).isEqualTo(LoginPage.TITLE);
-        });
+        await().untilAsserted(() -> assertThat(driver.getTitle()).isEqualTo(LoginPage.TITLE));
     }
 
     @DisplayName("Not logged in user should se login page if navigating to dashboard")
     @Test
-    void testRedirectoToLoginPageUnauthorizedUser() {
+    void testRedirectToLoginPageUnauthorizedUser() {
         // given I'm not logged in, when I open dashboard page
         dashboardPage.open();
 
         // then I should see login page
-        await().untilAsserted(() -> {
-            assertThat(driver.getTitle()).isEqualTo(LoginPage.TITLE);
-        });
+        await().untilAsserted(() -> assertThat(driver.getTitle()).isEqualTo(LoginPage.TITLE));
     }
 
 }
